@@ -81,7 +81,13 @@ import UIKit
     }
     
     
-    // MARK: - Internal functions
+
+}
+
+
+// MARK: - Internal functions
+
+extension LoadingBanner {
     
     func dismissBanner() {
         shouldShow = false
