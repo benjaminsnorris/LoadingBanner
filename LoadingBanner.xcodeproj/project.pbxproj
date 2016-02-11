@@ -10,6 +10,7 @@
 		70D703E41C6D438800F2B2BC /* LoadingBanner.h in Headers */ = {isa = PBXBuildFile; fileRef = 70D703E31C6D438800F2B2BC /* LoadingBanner.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		70D703EB1C6D438800F2B2BC /* LoadingBanner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 70D703E01C6D438800F2B2BC /* LoadingBanner.framework */; };
 		70D703F01C6D438800F2B2BC /* LoadingBannerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70D703EF1C6D438800F2B2BC /* LoadingBannerTests.swift */; };
+		70D703FB1C6D440500F2B2BC /* LoadingBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70D703FA1C6D440500F2B2BC /* LoadingBanner.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -29,6 +30,7 @@
 		70D703EA1C6D438800F2B2BC /* LoadingBannerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LoadingBannerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		70D703EF1C6D438800F2B2BC /* LoadingBannerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingBannerTests.swift; sourceTree = "<group>"; };
 		70D703F11C6D438800F2B2BC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		70D703FA1C6D440500F2B2BC /* LoadingBanner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadingBanner.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,6 +74,7 @@
 			isa = PBXGroup;
 			children = (
 				70D703E31C6D438800F2B2BC /* LoadingBanner.h */,
+				70D703FA1C6D440500F2B2BC /* LoadingBanner.swift */,
 				70D703E51C6D438800F2B2BC /* Info.plist */,
 			);
 			path = LoadingBanner;
@@ -194,6 +197,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				70D703FB1C6D440500F2B2BC /* LoadingBanner.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -311,6 +315,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
+				CLANG_ENABLE_MODULES = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -322,6 +327,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = design.bsn.LoadingBanner;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
@@ -329,6 +335,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
+				CLANG_ENABLE_MODULES = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
