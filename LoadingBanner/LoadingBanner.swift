@@ -72,14 +72,12 @@ import UIKit
     // MARK: - Public functions
     
     public func showError(message: String?) {
-        dispatch_async(dispatch_get_main_queue()) {
-            self.errorMessage = message
-            self.errorLabel.text = message
-            self.errorStackView.hidden = false
-            self.loadingStackView.hidden = true
-            self.shouldShow = true
-            self.configureShowing()
-        }
+        errorMessage = message
+        errorLabel.text = message
+        errorStackView.hidden = false
+        loadingStackView.hidden = true
+        shouldShow = true
+        configureShowing()
     }
     
     
@@ -109,19 +107,17 @@ private extension LoadingBanner {
     
     func configureShowing(completion: (() -> ())? = nil) {
         updateColors()
-        dispatch_async(dispatch_get_main_queue()) {
-            if self.shouldShow {
-                self.spinner.startAnimating()
-                self.heightConstraint.constant = self.height
-            } else {
-                self.spinner.stopAnimating()
-                self.heightConstraint.constant = 0.0
-            }
-            UIView.animateWithDuration(0.3, delay: 0.0, usingSpringWithDamping: 1.0, initialSpringVelocity: 1.0, options: [], animations: {
-                self.layoutIfNeeded()
-            }) { complete in
-                completion?()
-            }
+        if shouldShow {
+            spinner.startAnimating()
+            heightConstraint.constant = height
+        } else {
+            spinner.stopAnimating()
+            heightConstraint.constant = 0.0
+        }
+        UIView.animateWithDuration(0.3, delay: 0.0, usingSpringWithDamping: 1.0, initialSpringVelocity: 1.0, options: [], animations: {
+            self.layoutIfNeeded()
+        }) { complete in
+            completion?()
         }
     }
     
