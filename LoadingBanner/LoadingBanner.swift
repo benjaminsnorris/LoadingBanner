@@ -107,17 +107,21 @@ private extension LoadingBanner {
     
     func configureShowing(completion: (() -> ())? = nil) {
         updateColors()
-        if shouldShow {
-            spinner.startAnimating()
-            heightConstraint.constant = height
-        } else {
-            spinner.stopAnimating()
-            heightConstraint.constant = 0.0
-        }
-        UIView.animateWithDuration(0.3, delay: 0.0, usingSpringWithDamping: 1.0, initialSpringVelocity: 1.0, options: [], animations: {
-            self.layoutIfNeeded()
-        }) { complete in
-            completion?()
+        UIView.animateWithDuration(0.0, animations: {
+            // This is a hack to get the banner to start in the right place
+            }) { finished in
+                if self.shouldShow {
+                    self.spinner.startAnimating()
+                    self.heightConstraint.constant = self.height
+                } else {
+                    self.spinner.stopAnimating()
+                    self.heightConstraint.constant = 0.0
+                }
+                UIView.animateWithDuration(0.3, delay: 0.0, usingSpringWithDamping: 1.0, initialSpringVelocity: 1.0, options: [], animations: {
+                    self.layoutIfNeeded()
+                }) { complete in
+                    completion?()
+                }
         }
     }
     
@@ -135,7 +139,7 @@ private extension LoadingBanner {
     func setupViews() {
         backgroundColor = nil
         
-        heightConstraint = heightAnchor.constraintEqualToConstant(height)
+        heightConstraint = heightAnchor.constraintEqualToConstant(0.0)
         heightConstraint.active = true
         
         addSubview(visualEffectView)
