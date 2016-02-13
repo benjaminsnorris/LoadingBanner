@@ -114,10 +114,12 @@ private extension LoadingBanner {
             spinner.stopAnimating()
             heightConstraint.constant = 0.0
         }
-        UIView.animateWithDuration(0.3, delay: 0.0, usingSpringWithDamping: 1.0, initialSpringVelocity: 1.0, options: [], animations: {
-            self.layoutIfNeeded()
-        }) { complete in
-            completion?()
+        dispatch_async(dispatch_get_main_queue()) {
+            UIView.animateWithDuration(0.3, delay: 0.0, usingSpringWithDamping: 1.0, initialSpringVelocity: 1.0, options: [], animations: {
+                self.layoutIfNeeded()
+            }) { complete in
+                completion?()
+            }
         }
     }
     
