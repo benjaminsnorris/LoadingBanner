@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		705646861C766F25005A7FD3 /* UIViewController+LoadingBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 705646851C766F25005A7FD3 /* UIViewController+LoadingBanner.swift */; };
 		70D703E41C6D438800F2B2BC /* LoadingBanner.h in Headers */ = {isa = PBXBuildFile; fileRef = 70D703E31C6D438800F2B2BC /* LoadingBanner.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		70D703EB1C6D438800F2B2BC /* LoadingBanner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 70D703E01C6D438800F2B2BC /* LoadingBanner.framework */; };
 		70D703F01C6D438800F2B2BC /* LoadingBannerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70D703EF1C6D438800F2B2BC /* LoadingBannerTests.swift */; };
@@ -24,6 +25,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		705646851C766F25005A7FD3 /* UIViewController+LoadingBanner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+LoadingBanner.swift"; sourceTree = "<group>"; };
 		70D703E01C6D438800F2B2BC /* LoadingBanner.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = LoadingBanner.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		70D703E31C6D438800F2B2BC /* LoadingBanner.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LoadingBanner.h; sourceTree = "<group>"; };
 		70D703E51C6D438800F2B2BC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -75,6 +77,7 @@
 			children = (
 				70D703E31C6D438800F2B2BC /* LoadingBanner.h */,
 				70D703FA1C6D440500F2B2BC /* LoadingBanner.swift */,
+				705646851C766F25005A7FD3 /* UIViewController+LoadingBanner.swift */,
 				70D703E51C6D438800F2B2BC /* Info.plist */,
 			);
 			path = LoadingBanner;
@@ -198,6 +201,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				70D703FB1C6D440500F2B2BC /* LoadingBanner.swift in Sources */,
+				705646861C766F25005A7FD3 /* UIViewController+LoadingBanner.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -76,7 +76,7 @@ import UIKit
         loadingStackView.hidden = false
         errorStackView.hidden = true
         showing = true
-        showBanner()
+        toggleBanner()
     }
     
     public func dismiss() {
@@ -89,7 +89,7 @@ import UIKit
         errorStackView.hidden = false
         loadingStackView.hidden = true
         showing = true
-        showBanner()
+        toggleBanner()
     }
 
 }
@@ -101,7 +101,7 @@ extension LoadingBanner {
     
     func dismissBanner() {
         showing = false
-        showBanner({
+        toggleBanner({
             self.errorMessage = nil
             self.loadingStackView.hidden = false
             self.errorStackView.hidden = true
@@ -115,7 +115,7 @@ extension LoadingBanner {
 
 private extension LoadingBanner {
     
-    func showBanner(completion: (() -> ())? = nil) {
+    func toggleBanner(completion: (() -> ())? = nil) {
         updateColors()
         UIView.animateWithDuration(0.0, animations: {
             // This is a hack to get the banner to start in the right place
