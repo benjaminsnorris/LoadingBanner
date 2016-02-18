@@ -31,12 +31,6 @@ import UIKit
         }
     }
     
-    @IBInspectable public var loadingText: String = "Loading…" {
-        didSet {
-            loadingLabel.text = loadingText
-        }
-    }
-    
     
     // MARK: - Private properties
     
@@ -56,6 +50,11 @@ import UIKit
     private var showing = false
     
     
+    // MARK: - Constants
+    
+    private let defaultLoadingText = "Loading…"
+    
+    
     // MARK: - Initializers
     
     override public init(frame: CGRect) {
@@ -72,26 +71,26 @@ import UIKit
     // MARK: - Public functions
     
     public func showLoading() {
-        errorMessage = nil
-        loadingStackView.hidden = false
-        errorStackView.hidden = true
-        showing = true
-        toggleBanner()
+        toggleError(nil)
+        loadingLabel.text = defaultLoadingText
+        showBanner()
     }
     
+    public func showMessage(text: String?) {
+        toggleError(nil)
+        loadingLabel.text = text
+        showBanner()
+    }
+    
+    public func showError(message: String?) {
+        toggleError(message ?? "")
+        showBanner()
+    }
+
     public func dismiss() {
         dismissBanner()
     }
     
-    public func showError(message: String?) {
-        errorMessage = message
-        errorLabel.text = message
-        errorStackView.hidden = false
-        loadingStackView.hidden = true
-        showing = true
-        toggleBanner()
-    }
-
 }
 
 
@@ -143,6 +142,24 @@ private extension LoadingBanner {
         }
     }
     
+    func toggleError(message: String?) {
+        if let message = message {
+            errorMessage = message
+            errorLabel.text = message
+            errorStackView.hidden = false
+            loadingStackView.hidden = true
+        } else {
+            errorMessage = nil
+            loadingStackView.hidden = false
+            errorStackView.hidden = true
+        }
+    }
+    
+    func showBanner() {
+        showing = true
+        toggleBanner()
+    }
+    
     
     // MARK: - Initial setup
     
@@ -168,7 +185,7 @@ private extension LoadingBanner {
         loadingStackView.addArrangedSubview(spinner)
         spinner.hidesWhenStopped = false
         
-        loadingLabel.text = loadingText
+        loadingLabel.text = defaultLoadingText
         loadingLabel.font = UIFont.systemFontOfSize(UIFont.smallSystemFontSize())
         loadingStackView.addArrangedSubview(loadingLabel)
         
