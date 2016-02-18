@@ -12,13 +12,6 @@ import UIKit
 
     // MARK: - Public properties
     
-    @IBInspectable public var showing: Bool = false {
-        didSet {
-            shouldShow = showing
-            configureShowing()
-        }
-    }
-    
     @IBInspectable public var backgroundTint: UIColor = UIColor.blueColor().colorWithAlphaComponent(0.2) {
         didSet {
             updateColors()
@@ -38,6 +31,12 @@ import UIKit
         }
     }
     
+    @IBInspectable public var loadingText: String = "Loading…" {
+        didSet {
+            loadingLabel.text = loadingText
+        }
+    }
+    
     
     // MARK: - Private properties
     
@@ -50,10 +49,11 @@ import UIKit
     private let spinner = UIActivityIndicatorView(activityIndicatorStyle: .White)
     private var heightConstraint: NSLayoutConstraint!
     private let loadingStackView = UIStackView()
+    private let loadingLabel = UILabel()
     private let errorStackView = UIStackView()
     private let errorLabel = UILabel()
     private var errorMessage: String?
-    private var shouldShow = false
+    private var showing = false
     
     
     // MARK: - Initializers
@@ -71,16 +71,26 @@ import UIKit
     
     // MARK: - Public functions
     
+    public func showLoading() {
+        errorMessage = nil
+        loadingStackView.hidden = false
+        errorStackView.hidden = true
+        showing = true
+        showBanner()
+    }
+    
+    public func dismiss() {
+        dismissBanner()
+    }
+    
     public func showError(message: String?) {
         errorMessage = message
         errorLabel.text = message
         errorStackView.hidden = false
         loadingStackView.hidden = true
-        shouldShow = true
-        configureShowing()
+        showing = true
+        showBanner()
     }
-    
-    
 
 }
 
@@ -90,8 +100,8 @@ import UIKit
 extension LoadingBanner {
     
     func dismissBanner() {
-        shouldShow = false
-        configureShowing({
+        showing = false
+        showBanner({
             self.errorMessage = nil
             self.loadingStackView.hidden = false
             self.errorStackView.hidden = true
@@ -105,12 +115,12 @@ extension LoadingBanner {
 
 private extension LoadingBanner {
     
-    func configureShowing(completion: (() -> ())? = nil) {
+    func showBanner(completion: (() -> ())? = nil) {
         updateColors()
         UIView.animateWithDuration(0.0, animations: {
             // This is a hack to get the banner to start in the right place
             }) { finished in
-                if self.shouldShow {
+                if self.showing {
                     self.spinner.startAnimating()
                     self.heightConstraint.constant = self.height
                 } else {
@@ -158,10 +168,9 @@ private extension LoadingBanner {
         loadingStackView.addArrangedSubview(spinner)
         spinner.hidesWhenStopped = false
         
-        let label = UILabel()
-        label.text = "Loading..."
-        label.font = UIFont.systemFontOfSize(UIFont.smallSystemFontSize())
-        loadingStackView.addArrangedSubview(label)
+        loadingLabel.text = loadingText
+        loadingLabel.font = UIFont.systemFontOfSize(UIFont.smallSystemFontSize())
+        loadingStackView.addArrangedSubview(loadingLabel)
         
         vibrancyView.contentView.addSubview(errorStackView)
         setupFullSize(errorStackView)
