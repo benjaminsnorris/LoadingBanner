@@ -58,7 +58,7 @@ LoadingBanner includes an extension on `UIViewController` that can display a loa
 When the loading banner is shown, it will remain visible until it is dismissed in some way, either by calling `dismiss()`, or from the user tapping on the banner. When an error is shown, a close button is visible ("✕") to make it clear to the user that the banner can be dismissed by tapping on it. However, at any time, if the banner is tapped, it will be dismissed.
 
 #### `showLoading()`
-> Animated gif with example coming soon
+![Loading animation](documentation/images/loading.gif)
 
 Usually you will call this before making an asynchronous call.
 
@@ -79,7 +79,7 @@ Usually you will call this before making an asynchronous call.
 
 
 #### `showMessage(String?)`
-> Animated gif with example coming soon
+![Saving animation](documentation/images/saving.gif)
 
 This can be used to show the loading banner in the same style as loading, but with a custom message.
 
@@ -99,7 +99,7 @@ This can be used to show the loading banner in the same style as loading, but wi
 ```
 
 #### `showError(String?)`
-> Animated gif with example coming soon
+![Error animation](documentation/images/error.gif)
 
 This can be used to show an error or other non-blocking alert that will be styled by default to appear more serious.
 
@@ -119,7 +119,7 @@ This can be used to show an error or other non-blocking alert that will be style
 ```
 
 #### `dismiss()`
-> Animated gif with example coming soon
+![Loading animation](documentation/images/loading.gif)
 
 This is called to dismiss the loading banner. It is often called on a successfully completion of an asynchronous call.
 
