@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		705646861C766F25005A7FD3 /* UIViewController+LoadingBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 705646851C766F25005A7FD3 /* UIViewController+LoadingBanner.swift */; };
-		70D703E41C6D438800F2B2BC /* LoadingBanner.h in Headers */ = {isa = PBXBuildFile; fileRef = 70D703E31C6D438800F2B2BC /* LoadingBanner.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		70D703EB1C6D438800F2B2BC /* LoadingBanner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 70D703E01C6D438800F2B2BC /* LoadingBanner.framework */; };
 		70D703F01C6D438800F2B2BC /* LoadingBannerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70D703EF1C6D438800F2B2BC /* LoadingBannerTests.swift */; };
 		70D703FB1C6D440500F2B2BC /* LoadingBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70D703FA1C6D440500F2B2BC /* LoadingBanner.swift */; };
@@ -25,14 +24,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		705646851C766F25005A7FD3 /* UIViewController+LoadingBanner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+LoadingBanner.swift"; sourceTree = "<group>"; };
+		705646851C766F25005A7FD3 /* UIViewController+LoadingBanner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIViewController+LoadingBanner.swift"; path = "../Sources/UIViewController+LoadingBanner.swift"; sourceTree = "<group>"; };
 		70D703E01C6D438800F2B2BC /* LoadingBanner.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = LoadingBanner.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		70D703E31C6D438800F2B2BC /* LoadingBanner.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LoadingBanner.h; sourceTree = "<group>"; };
-		70D703E51C6D438800F2B2BC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		70D703E51C6D438800F2B2BC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = ../SupportingFiles/Info.plist; sourceTree = "<group>"; };
 		70D703EA1C6D438800F2B2BC /* LoadingBannerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LoadingBannerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		70D703EF1C6D438800F2B2BC /* LoadingBannerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingBannerTests.swift; sourceTree = "<group>"; };
-		70D703F11C6D438800F2B2BC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		70D703FA1C6D440500F2B2BC /* LoadingBanner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadingBanner.swift; sourceTree = "<group>"; };
+		70D703EF1C6D438800F2B2BC /* LoadingBannerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LoadingBannerTests.swift; path = ../Tests/LoadingBannerTests.swift; sourceTree = "<group>"; };
+		70D703F11C6D438800F2B2BC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = ../SupportingFiles/LoadingBannerTests/Info.plist; sourceTree = "<group>"; };
+		70D703FA1C6D440500F2B2BC /* LoadingBanner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoadingBanner.swift; path = ../Sources/LoadingBanner.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -75,7 +73,6 @@
 		70D703E21C6D438800F2B2BC /* LoadingBanner */ = {
 			isa = PBXGroup;
 			children = (
-				70D703E31C6D438800F2B2BC /* LoadingBanner.h */,
 				70D703FA1C6D440500F2B2BC /* LoadingBanner.swift */,
 				705646851C766F25005A7FD3 /* UIViewController+LoadingBanner.swift */,
 				70D703E51C6D438800F2B2BC /* Info.plist */,
@@ -99,7 +96,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				70D703E41C6D438800F2B2BC /* LoadingBanner.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -324,7 +320,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = LoadingBanner/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/SupportingFiles/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -344,7 +340,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = LoadingBanner/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/SupportingFiles/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -357,7 +353,7 @@
 		70D703F81C6D438800F2B2BC /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				INFOPLIST_FILE = LoadingBannerTests/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/SupportingFiles/LoadingBannerTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = design.bsn.LoadingBannerTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -367,7 +363,7 @@
 		70D703F91C6D438800F2B2BC /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				INFOPLIST_FILE = LoadingBannerTests/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/SupportingFiles/LoadingBannerTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = design.bsn.LoadingBannerTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
