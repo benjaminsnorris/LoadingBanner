@@ -64,7 +64,7 @@ Usually you will call this before making an asynchronous call.
 ```
 
 
-#### `showMessage(messageString)`
+#### `showMessage(String?)`
 > Animated gif with example coming soon
 
 This can be used to show the loading banner in the same style as loading, but with a custom message.
@@ -84,7 +84,7 @@ This can be used to show the loading banner in the same style as loading, but wi
   }
 ```
 
-#### `showError(errorString)`
+#### `showError(String?)`
 > Animated gif with example coming soon
 
 This can be used to show an error or other non-blocking alert that will be styled by default to appear more serious.
@@ -125,7 +125,29 @@ This is called to dismiss the loading banner. It is often called on a successful
 ```
 
 ### Customization
-If you need further control over the look and appearance of the loading banner, instead of using the `sharedLoadingBanner`, you can add an instance of the loading banner to your storyboard, or in code. Then you can take advantage of the following customization properties.
+If you need further control over the look and appearance of the loading banner, instead of using the `sharedLoadingBanner`, add an instance of `LoadingBanner` to your storyboard, or in code. Then you can take advantage of the following customization properties.
+
+**Note:** The background of LoadingBanner is an `UIVisualEffectView` with a blur effect with an extra light style. If you set the `backgroundTint` or `errorTint` to an opaque color, nothing will be seen under the banner. However, if you lower the alpha, views underneath the banner will still be slightly visible, in the traditional manner of a blurred visual effect view. Also, the text in the banner is applied using a `UIVibrancyEffect`, so the color will adapt as needed for legibility.
+
+#### `backgroundTint: UIColor`
+This color will be applied to the background of the banner when calling `showLoading()` or `showMessage(String?)`.
+
+> Default: `UIColor.blueColor().colorWithAlphaComponent(0.2)`
+
+#### `errorTint: UIColor`
+This color will be applied to the background of the banner when calling `showError(String?)`.
+
+> Default: `UIColor.redColor().colorWithAlphaComponent(0.2)`
+
+#### `height: CGFloat`
+This will change the height of the banner when shown. This height will also be used when previewing in Interface Builder. The banner will be visible if added to a storyboard, but when the app is actually launched, the banner will default to a dismissed position.
+
+> Default: `24.0`
+
+#### `defaultText: String`
+This is the text that will be displayed when calling `showLoading()`. This text will appear when previewing the banner in Interface Builder.
+
+> Default: `"Loading…"`
 
 
 ## Integration
