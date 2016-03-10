@@ -8,7 +8,21 @@ An iOS component for a small, collapsible banner to show loading or error status
 
 1. [Requirements](#requirements)
 2. [Usage](#usage)
+  - [Shared Loading Banner](#shared-loading-banner)
+  - [Available actions](#available-actions)
+    - [showLoading()](#showloading)
+    - [showMessage(String?)](#showmessagestring)
+    - [showError(String?)](#showerrorstring)
+    - [dismiss()](#dismiss)
+  - [Customization](#customization)
+    - [backgroundTint: UIColor](#backgroundtint-uicolor)
+    - [errorTint: UIColor](#errortint-uicolor)
+    - [height: CGFloat](#height-cgfloat)
+    - [defaultText: String](#defaulttext-string)
 3. [Integration](#integration)
+  - [Carthage](#carthage)
+  - [Swift Package Manager](#swift-package-manager)
+  - [Git Submodules](#git-submodules)
 
 
 ## Requirements
