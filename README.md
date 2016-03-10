@@ -179,7 +179,7 @@ $ brew install carthage
 To integrate LoadingBanner into your Xcode project using Carthage, specify it in your `Cartfile`:
 
 ```ogdl
-github "benjaminsnorris/LoadingBanner"
+github "benjaminsnorris/LoadingBanner" ~> 1.0
 ```
 
 Run `carthage update` to build the framework and drag the built `LoadingBanner.framework` into your Xcode project.
