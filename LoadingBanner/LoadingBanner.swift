@@ -31,6 +31,12 @@ import UIKit
         }
     }
     
+    @IBInspectable public var defaultText: String = "Loading…" {
+        didSet {
+            loadingLabel.text = defaultText
+        }
+    }
+    
     
     // MARK: - Private properties
     
@@ -50,11 +56,6 @@ import UIKit
     private var showing = false
     
     
-    // MARK: - Constants
-    
-    private let defaultLoadingText = "Loading…"
-    
-    
     // MARK: - Initializers
     
     override public init(frame: CGRect) {
@@ -68,11 +69,20 @@ import UIKit
     }
     
     
+    // MARK: - Lifecycle overrides
+    
+    public override func prepareForInterfaceBuilder() {
+        super.prepareForInterfaceBuilder()
+        heightConstraint.constant = height
+        layoutIfNeeded()
+    }
+    
+    
     // MARK: - Public functions
     
     public func showLoading() {
         toggleError(nil)
-        loadingLabel.text = defaultLoadingText
+        loadingLabel.text = defaultText
         showBanner()
     }
     
@@ -185,7 +195,7 @@ private extension LoadingBanner {
         loadingStackView.addArrangedSubview(spinner)
         spinner.hidesWhenStopped = false
         
-        loadingLabel.text = defaultLoadingText
+        loadingLabel.text = defaultText
         loadingLabel.font = UIFont.systemFontOfSize(UIFont.smallSystemFontSize())
         loadingStackView.addArrangedSubview(loadingLabel)
         
