@@ -1,10 +1,9 @@
-//
-//  LoadingBanner.swift
-//  falkor
-//
-//  Created by Ben Norris on 2/10/16.
-//  Copyright © 2016 OC Tanner. All rights reserved.
-//
+/*
+ |  _   ____   ____   _
+ | | |‾|  ⚈ |-| ⚈  |‾| |
+ | | |  ‾‾‾‾| |‾‾‾‾  | |
+ |  ‾        ‾        ‾
+ */
 
 import UIKit
 
