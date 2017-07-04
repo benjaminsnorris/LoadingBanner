@@ -17,6 +17,12 @@ import UIKit
         }
     }
     
+    @IBInspectable open var successTint: UIColor = UIColor.green.withAlphaComponent(0.2) {
+        didSet {
+            updateColors()
+        }
+    }
+    
     @IBInspectable open var errorTint: UIColor = UIColor.red.withAlphaComponent(0.2) {
         didSet {
             updateColors()
@@ -56,11 +62,17 @@ import UIKit
     var vibrancyView: UIVisualEffectView!
     
     
+    // MARK: - Private enums
+    
+    fileprivate enum Status {
+        case loading, error, success
+    }
+    
+    
     // MARK: - Private properties
     
-    
+    fileprivate var status = Status.loading
     fileprivate let spinner = UIActivityIndicatorView(activityIndicatorStyle: .white)
-    fileprivate let checkMarkLabel = UILabel()
     fileprivate var heightConstraint: NSLayoutConstraint!
     fileprivate let loadingStackView = UIStackView()
     fileprivate let loadingLabel = UILabel()
@@ -96,22 +108,25 @@ import UIKit
     
     open func showLoading() {
         toggleError(nil)
+        status = .loading
         loadingLabel.text = defaultText
-        spinner.startAnimating()
+        toggleSpinner(toShowing: true)
         showBanner()
     }
     
     open func showMessage(_ text: String?) {
         toggleError(nil)
+        status = .loading
         loadingLabel.text = text
-        spinner.startAnimating()
+        toggleSpinner(toShowing: true)
         showBanner()
     }
     
     open func showSuccess(message: String?, for duration: Double = 2.0) {
         toggleError(nil)
+        status = .success
         loadingLabel.text = message
-        spinner.stopAnimating()
+        toggleSpinner(toShowing: false)
         showBanner()
         delay(duration) { 
             self.dismissBanner()
@@ -120,6 +135,7 @@ import UIKit
     
     open func showError(_ message: String?) {
         toggleError(message ?? "")
+        status = .error
         showBanner()
     }
 
@@ -156,10 +172,8 @@ private extension LoadingBanner {
             // This is a hack to get the banner to start in the right place
             }, completion: { finished in
                 if self.showing {
-                    self.spinner.startAnimating()
                     self.heightConstraint.constant = self.height
                 } else {
-                    self.spinner.stopAnimating()
                     self.heightConstraint.constant = 0.0
                 }
                 UIView.animate(withDuration: 0.3, delay: 0.0, usingSpringWithDamping: 1.0, initialSpringVelocity: 1.0, options: [], animations: {
@@ -171,10 +185,13 @@ private extension LoadingBanner {
     }
     
     func updateColors() {
-        if let _ = errorMessage {
-            visualEffectView.contentView.backgroundColor = errorTint
-        } else {
+        switch status {
+        case .loading:
             visualEffectView.contentView.backgroundColor = backgroundTint
+        case .error:
+            visualEffectView.contentView.backgroundColor = errorTint
+        case .success:
+            visualEffectView.contentView.backgroundColor = successTint
         }
     }
     
@@ -188,6 +205,14 @@ private extension LoadingBanner {
             errorMessage = nil
             loadingStackView.isHidden = false
             errorStackView.isHidden = true
+        }
+    }
+    
+    func toggleSpinner(toShowing: Bool) {
+        if toShowing {
+            spinner.startAnimating()
+        } else {
+            spinner.stopAnimating()
         }
     }
     
@@ -224,12 +249,6 @@ private extension LoadingBanner {
         loadingStackView.spacing = 4.0
         
         loadingStackView.addArrangedSubview(spinner)
-        
-        checkMarkLabel.text = "✔"
-        checkMarkLabel.textAlignment = .right
-        checkMarkLabel.font = UIFont.preferredFont(forTextStyle: .caption1)
-        loadingStackView.addArrangedSubview(checkMarkLabel)
-        checkMarkLabel.isHidden = true
         
         loadingLabel.text = defaultText
         if #available(iOSApplicationExtension 10.0, *) {
