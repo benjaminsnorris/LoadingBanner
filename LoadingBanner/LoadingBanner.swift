@@ -8,30 +8,30 @@
 
 import UIKit
 
-@IBDesignable public class LoadingBanner: UIView {
+@IBDesignable open class LoadingBanner: UIView {
 
     // MARK: - Public properties
     
-    @IBInspectable public var backgroundTint: UIColor = UIColor.blueColor().colorWithAlphaComponent(0.2) {
+    @IBInspectable open var backgroundTint: UIColor = UIColor.blue.withAlphaComponent(0.2) {
         didSet {
             updateColors()
         }
     }
     
-    @IBInspectable public var errorTint: UIColor = UIColor.redColor().colorWithAlphaComponent(0.2) {
+    @IBInspectable open var errorTint: UIColor = UIColor.red.withAlphaComponent(0.2) {
         didSet {
             updateColors()
         }
     }
     
-    @IBInspectable public var height: CGFloat = 24.0 {
+    @IBInspectable open var height: CGFloat = 24.0 {
         didSet {
             heightConstraint.constant = height
             layoutIfNeeded()
         }
     }
     
-    @IBInspectable public var defaultText: String = "Loading…" {
+    @IBInspectable open var defaultText: String = "Loading…" {
         didSet {
             loadingLabel.text = defaultText
         }
@@ -40,20 +40,20 @@ import UIKit
     
     // MARK: - Private properties
     
-    private let visualEffectView: UIVisualEffectView = {
-        let lightStyle = UIBlurEffectStyle.ExtraLight
+    fileprivate let visualEffectView: UIVisualEffectView = {
+        let lightStyle = UIBlurEffectStyle.extraLight
         let lightBlurEffect = UIBlurEffect(style: lightStyle)
         return UIVisualEffectView(effect: lightBlurEffect)
     }()
     
-    private let spinner = UIActivityIndicatorView(activityIndicatorStyle: .White)
-    private var heightConstraint: NSLayoutConstraint!
-    private let loadingStackView = UIStackView()
-    private let loadingLabel = UILabel()
-    private let errorStackView = UIStackView()
-    private let errorLabel = UILabel()
-    private var errorMessage: String?
-    private var showing = false
+    fileprivate let spinner = UIActivityIndicatorView(activityIndicatorStyle: .white)
+    fileprivate var heightConstraint: NSLayoutConstraint!
+    fileprivate let loadingStackView = UIStackView()
+    fileprivate let loadingLabel = UILabel()
+    fileprivate let errorStackView = UIStackView()
+    fileprivate let errorLabel = UILabel()
+    fileprivate var errorMessage: String?
+    fileprivate var showing = false
     
     
     // MARK: - Initializers
@@ -71,7 +71,7 @@ import UIKit
     
     // MARK: - Lifecycle overrides
     
-    public override func prepareForInterfaceBuilder() {
+    open override func prepareForInterfaceBuilder() {
         super.prepareForInterfaceBuilder()
         heightConstraint.constant = height
         layoutIfNeeded()
@@ -80,24 +80,24 @@ import UIKit
     
     // MARK: - Public functions
     
-    public func showLoading() {
+    open func showLoading() {
         toggleError(nil)
         loadingLabel.text = defaultText
         showBanner()
     }
     
-    public func showMessage(text: String?) {
+    open func showMessage(_ text: String?) {
         toggleError(nil)
         loadingLabel.text = text
         showBanner()
     }
     
-    public func showError(message: String?) {
+    open func showError(_ message: String?) {
         toggleError(message ?? "")
         showBanner()
     }
 
-    public func dismiss() {
+    open func dismiss() {
         dismissBanner()
     }
     
@@ -112,8 +112,8 @@ extension LoadingBanner {
         showing = false
         toggleBanner({
             self.errorMessage = nil
-            self.loadingStackView.hidden = false
-            self.errorStackView.hidden = true
+            self.loadingStackView.isHidden = false
+            self.errorStackView.isHidden = true
         })
     }
 
@@ -124,11 +124,11 @@ extension LoadingBanner {
 
 private extension LoadingBanner {
     
-    func toggleBanner(completion: (() -> ())? = nil) {
+    func toggleBanner(_ completion: (() -> ())? = nil) {
         updateColors()
-        UIView.animateWithDuration(0.0, animations: {
+        UIView.animate(withDuration: 0.0, animations: {
             // This is a hack to get the banner to start in the right place
-            }) { finished in
+            }, completion: { finished in
                 if self.showing {
                     self.spinner.startAnimating()
                     self.heightConstraint.constant = self.height
@@ -136,12 +136,12 @@ private extension LoadingBanner {
                     self.spinner.stopAnimating()
                     self.heightConstraint.constant = 0.0
                 }
-                UIView.animateWithDuration(0.3, delay: 0.0, usingSpringWithDamping: 1.0, initialSpringVelocity: 1.0, options: [], animations: {
+                UIView.animate(withDuration: 0.3, delay: 0.0, usingSpringWithDamping: 1.0, initialSpringVelocity: 1.0, options: [], animations: {
                     self.layoutIfNeeded()
                 }) { complete in
                     completion?()
                 }
-        }
+        }) 
     }
     
     func updateColors() {
@@ -152,16 +152,16 @@ private extension LoadingBanner {
         }
     }
     
-    func toggleError(message: String?) {
+    func toggleError(_ message: String?) {
         if let message = message {
             errorMessage = message
             errorLabel.text = message
-            errorStackView.hidden = false
-            loadingStackView.hidden = true
+            errorStackView.isHidden = false
+            loadingStackView.isHidden = true
         } else {
             errorMessage = nil
-            loadingStackView.hidden = false
-            errorStackView.hidden = true
+            loadingStackView.isHidden = false
+            errorStackView.isHidden = true
         }
     }
     
@@ -176,65 +176,65 @@ private extension LoadingBanner {
     func setupViews() {
         backgroundColor = nil
         
-        heightConstraint = heightAnchor.constraintEqualToConstant(0.0)
-        heightConstraint.active = true
+        heightConstraint = heightAnchor.constraint(equalToConstant: 0.0)
+        heightConstraint.isActive = true
         
         addSubview(visualEffectView)
         setupFullSize(visualEffectView)
         
-        let vibrancyEffect = UIVibrancyEffect(forBlurEffect: visualEffectView.effect as! UIBlurEffect)
+        let vibrancyEffect = UIVibrancyEffect(blurEffect: visualEffectView.effect as! UIBlurEffect)
         let vibrancyView = UIVisualEffectView(effect: vibrancyEffect)
         visualEffectView.contentView.addSubview(vibrancyView)
         setupFullSize(vibrancyView)
         
         vibrancyView.contentView.addSubview(loadingStackView)
         setupFullHeight(loadingStackView)
-        loadingStackView.centerXAnchor.constraintEqualToAnchor(vibrancyView.centerXAnchor).active = true
+        loadingStackView.centerXAnchor.constraint(equalTo: vibrancyView.centerXAnchor).isActive = true
         loadingStackView.spacing = 4.0
         
         loadingStackView.addArrangedSubview(spinner)
         spinner.hidesWhenStopped = false
         
         loadingLabel.text = defaultText
-        loadingLabel.font = UIFont.systemFontOfSize(UIFont.smallSystemFontSize())
+        loadingLabel.font = UIFont.systemFont(ofSize: UIFont.smallSystemFontSize)
         loadingStackView.addArrangedSubview(loadingLabel)
         
         vibrancyView.contentView.addSubview(errorStackView)
         setupFullSize(errorStackView)
         
         errorStackView.addArrangedSubview(errorLabel)
-        errorLabel.font = UIFont.systemFontOfSize(UIFont.smallSystemFontSize())
-        errorLabel.textAlignment = .Center
+        errorLabel.font = UIFont.systemFont(ofSize: UIFont.smallSystemFontSize)
+        errorLabel.textAlignment = .center
         
         let closeLabel = UILabel()
         closeLabel.text = "✕"
-        closeLabel.font = UIFont.systemFontOfSize(UIFont.smallSystemFontSize())
+        closeLabel.font = UIFont.systemFont(ofSize: UIFont.smallSystemFontSize)
         closeLabel.translatesAutoresizingMaskIntoConstraints = false
-        closeLabel.widthAnchor.constraintEqualToAnchor(closeLabel.heightAnchor).active = true
+        closeLabel.widthAnchor.constraint(equalTo: closeLabel.heightAnchor).isActive = true
         errorStackView.addArrangedSubview(closeLabel)
         
-        errorStackView.hidden = true
+        errorStackView.isHidden = true
         
         let button = UIButton()
         addSubview(button)
         setupFullSize(button)
-        button.addTarget(self, action: "dismissBanner", forControlEvents: .TouchUpInside)
+        button.addTarget(self, action: #selector(LoadingBanner.dismissBanner), for: .touchUpInside)
         
         updateColors()
     }
     
-    func setupFullSize(view: UIView) {
+    func setupFullSize(_ view: UIView) {
         guard let superview = view.superview else { fatalError("Must have a superview to set up constraints") }
         setupFullHeight(view)
-        view.leadingAnchor.constraintEqualToAnchor(superview.leadingAnchor).active = true
-        view.trailingAnchor.constraintEqualToAnchor(superview.trailingAnchor).active = true
+        view.leadingAnchor.constraint(equalTo: superview.leadingAnchor).isActive = true
+        view.trailingAnchor.constraint(equalTo: superview.trailingAnchor).isActive = true
 }
     
-    func setupFullHeight(view: UIView) {
+    func setupFullHeight(_ view: UIView) {
         guard let superview = view.superview else { fatalError("Must have a superview to set up constraints") }
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.topAnchor.constraintEqualToAnchor(superview.topAnchor).active = true
-        view.bottomAnchor.constraintEqualToAnchor(superview.bottomAnchor).active = true
+        view.topAnchor.constraint(equalTo: superview.topAnchor).isActive = true
+        view.bottomAnchor.constraint(equalTo: superview.bottomAnchor).isActive = true
     }
     
 }

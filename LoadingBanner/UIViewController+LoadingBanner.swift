@@ -19,9 +19,9 @@ public extension UIViewController {
         let loadingBanner = StaticBanner.banner
         view.addSubview(loadingBanner)
         loadingBanner.translatesAutoresizingMaskIntoConstraints = false
-        loadingBanner.leadingAnchor.constraintEqualToAnchor(view.leadingAnchor).active = true
-        loadingBanner.topAnchor.constraintEqualToAnchor(topLayoutGuide.bottomAnchor).active = true
-        loadingBanner.trailingAnchor.constraintEqualToAnchor(view.trailingAnchor).active = true
+        loadingBanner.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        loadingBanner.topAnchor.constraint(equalTo: topLayoutGuide.bottomAnchor).isActive = true
+        loadingBanner.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         return loadingBanner
     }
     
