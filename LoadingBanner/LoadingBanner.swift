@@ -60,6 +60,7 @@ import UIKit
     
     
     fileprivate let spinner = UIActivityIndicatorView(activityIndicatorStyle: .white)
+    fileprivate let checkMarkLabel = UILabel()
     fileprivate var heightConstraint: NSLayoutConstraint!
     fileprivate let loadingStackView = UIStackView()
     fileprivate let loadingLabel = UILabel()
@@ -96,13 +97,25 @@ import UIKit
     open func showLoading() {
         toggleError(nil)
         loadingLabel.text = defaultText
+        spinner.startAnimating()
         showBanner()
     }
     
     open func showMessage(_ text: String?) {
         toggleError(nil)
         loadingLabel.text = text
+        spinner.startAnimating()
         showBanner()
+    }
+    
+    open func showSuccess(message: String?, for duration: Double = 2.0) {
+        toggleError(nil)
+        loadingLabel.text = message
+        spinner.stopAnimating()
+        showBanner()
+        delay(duration) { 
+            self.dismissBanner()
+        }
     }
     
     open func showError(_ message: String?) {
@@ -183,6 +196,11 @@ private extension LoadingBanner {
         toggleBanner()
     }
     
+    func delay(_ delay: Double, _ closure: @escaping () -> ()) {
+        let time = DispatchTime.now() + Double(Int64(delay * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)
+        DispatchQueue.main.asyncAfter(deadline: time, execute: closure)
+    }
+    
     
     // MARK: - Initial setup
     
@@ -206,22 +224,34 @@ private extension LoadingBanner {
         loadingStackView.spacing = 4.0
         
         loadingStackView.addArrangedSubview(spinner)
-        spinner.hidesWhenStopped = false
+        
+        checkMarkLabel.text = "✔"
+        checkMarkLabel.textAlignment = .right
+        checkMarkLabel.font = UIFont.preferredFont(forTextStyle: .caption1)
+        loadingStackView.addArrangedSubview(checkMarkLabel)
+        checkMarkLabel.isHidden = true
         
         loadingLabel.text = defaultText
-        loadingLabel.font = UIFont.systemFont(ofSize: UIFont.smallSystemFontSize)
+        if #available(iOSApplicationExtension 10.0, *) {
+            loadingLabel.adjustsFontForContentSizeCategory = true
+        }
+        loadingLabel.font = UIFont.preferredFont(forTextStyle: .caption1)
         loadingStackView.addArrangedSubview(loadingLabel)
         
         vibrancyView.contentView.addSubview(errorStackView)
         setupFullSize(errorStackView)
         
         errorStackView.addArrangedSubview(errorLabel)
-        errorLabel.font = UIFont.systemFont(ofSize: UIFont.smallSystemFontSize)
+        if #available(iOSApplicationExtension 10.0, *) {
+            errorLabel.adjustsFontForContentSizeCategory = true
+        }
+        errorLabel.font = UIFont.preferredFont(forTextStyle: .caption1)
         errorLabel.textAlignment = .center
         
         let closeLabel = UILabel()
         closeLabel.text = "✕"
-        closeLabel.font = UIFont.systemFont(ofSize: UIFont.smallSystemFontSize)
+        closeLabel.font = UIFont.preferredFont(forTextStyle: .caption1)
+        closeLabel.textAlignment = .center
         closeLabel.translatesAutoresizingMaskIntoConstraints = false
         closeLabel.widthAnchor.constraint(equalTo: closeLabel.heightAnchor).isActive = true
         errorStackView.addArrangedSubview(closeLabel)
