@@ -36,14 +36,28 @@ import UIKit
         }
     }
     
+    open var effectStyle: UIBlurEffectStyle = .extraLight {
+        didSet {
+            let effect = UIBlurEffect(style: effectStyle)
+            visualEffectView.effect = effect
+            let vibrancyEffect = UIVibrancyEffect(blurEffect: effect)
+            vibrancyView.effect = vibrancyEffect
+        }
+    }
     
-    // MARK: - Private properties
     
-    fileprivate let visualEffectView: UIVisualEffectView = {
+    // MARK: - Internal properties
+    
+    var visualEffectView: UIVisualEffectView = {
         let lightStyle = UIBlurEffectStyle.extraLight
         let lightBlurEffect = UIBlurEffect(style: lightStyle)
         return UIVisualEffectView(effect: lightBlurEffect)
     }()
+    var vibrancyView: UIVisualEffectView!
+    
+    
+    // MARK: - Private properties
+    
     
     fileprivate let spinner = UIActivityIndicatorView(activityIndicatorStyle: .white)
     fileprivate var heightConstraint: NSLayoutConstraint!
@@ -182,7 +196,7 @@ private extension LoadingBanner {
         setupFullSize(visualEffectView)
         
         let vibrancyEffect = UIVibrancyEffect(blurEffect: visualEffectView.effect as! UIBlurEffect)
-        let vibrancyView = UIVisualEffectView(effect: vibrancyEffect)
+        vibrancyView = UIVisualEffectView(effect: vibrancyEffect)
         visualEffectView.contentView.addSubview(vibrancyView)
         setupFullSize(vibrancyView)
         
