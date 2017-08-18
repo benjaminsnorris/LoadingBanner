@@ -157,6 +157,7 @@ public protocol LoadingBannerDelegate: class {
 extension LoadingBanner {
     
     func bannerTapped() {
+        buttonTouchEnded()
         if let delegate = delegate {
             delegate.bannerTapped(self)
         } else {
@@ -167,6 +168,19 @@ extension LoadingBanner {
     func dismissBanner() {
         showing = false
         toggleBanner()
+    }
+    
+    func buttonTouchBegan() {
+        toggleViews(highlighted: true)
+    }
+    
+    func buttonTouchEnded() {
+        toggleViews(highlighted: false)
+    }
+    
+    func toggleViews(highlighted: Bool) {
+        let alpha: CGFloat = highlighted ? 0.2 : 1.0
+        stackView.alpha = alpha
     }
 
 }
@@ -281,6 +295,8 @@ private extension LoadingBanner {
         addSubview(button)
         setupFullSize(button)
         button.addTarget(self, action: #selector(LoadingBanner.bannerTapped), for: .touchUpInside)
+        button.addTarget(self, action: #selector(buttonTouchBegan), for: .touchDown)
+        button.addTarget(self, action: #selector(buttonTouchEnded), for: .touchDragExit)
         
         updateColors()
     }
