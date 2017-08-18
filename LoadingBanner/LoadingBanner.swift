@@ -263,16 +263,19 @@ private extension LoadingBanner {
         stackView.addArrangedSubview(messageLabel)
         messageLabel.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
         
-        let trailingSpacer = UIView()
-        stackView.addArrangedSubview(trailingSpacer)
+        let middleSpacer = UIView()
+        stackView.addArrangedSubview(middleSpacer)
         
         fakeButton.text = defaultFakeButtonTitle
         fakeButton.font = UIFont.preferredFont(forTextStyle: .caption1)
         fakeButton.textAlignment = .center
         fakeButton.translatesAutoresizingMaskIntoConstraints = false
-        fakeButton.widthAnchor.constraint(greaterThanOrEqualTo: fakeButton.heightAnchor, multiplier: 1.0).isActive = true
         fakeButton.setContentHuggingPriority(800, for: .horizontal)
         stackView.addArrangedSubview(fakeButton)
+        
+        let trailingSpacer = UIView()
+        trailingSpacer.widthAnchor.constraint(equalToConstant: 8.0).isActive = true
+        stackView.addArrangedSubview(trailingSpacer)
         
         let button = UIButton()
         addSubview(button)
