@@ -246,10 +246,12 @@ private extension LoadingBanner {
         setupFullSize(vibrancyView)
         
         vibrancyView.contentView.addSubview(stackView)
-        setupFullHeight(stackView)
+        setupFullSize(stackView)
         stackView.centerXAnchor.constraint(equalTo: vibrancyView.centerXAnchor).isActive = true
         stackView.spacing = 4.0
         
+        let leadingSpacer = UIView()
+        stackView.addArrangedSubview(leadingSpacer)
         stackView.addArrangedSubview(spinner)
         
         messageLabel.text = defaultText
@@ -257,7 +259,12 @@ private extension LoadingBanner {
             messageLabel.adjustsFontForContentSizeCategory = true
         }
         messageLabel.font = UIFont.preferredFont(forTextStyle: .caption1)
+        messageLabel.textAlignment = .center
         stackView.addArrangedSubview(messageLabel)
+        messageLabel.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
+        
+        let trailingSpacer = UIView()
+        stackView.addArrangedSubview(trailingSpacer)
         
         fakeButton.text = defaultFakeButtonTitle
         fakeButton.font = UIFont.preferredFont(forTextStyle: .caption1)
