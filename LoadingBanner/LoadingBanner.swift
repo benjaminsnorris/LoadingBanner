@@ -96,6 +96,7 @@ public protocol LoadingBannerDelegate: class {
     fileprivate var showing = false
     fileprivate let defaultFakeButtonTitle = "✕"
     fileprivate var timer: Timer?
+    fileprivate var timerAmount: TimeInterval?
     
     
     // MARK: - Initializers
@@ -128,6 +129,7 @@ public protocol LoadingBannerDelegate: class {
     
     open func showMessage(_ text: String?, customButtonText: String? = nil, for duration: TimeInterval? = nil) {
         showBanner(with: .loading, message: text, customButtonTitle: customButtonText)
+        timerAmount = duration
         if let duration = duration {
             timer = Timer.scheduledTimer(timeInterval: duration, target: self, selector: #selector(dismissBanner), userInfo: nil, repeats: false)
         }
@@ -135,11 +137,13 @@ public protocol LoadingBannerDelegate: class {
     
     open func showSuccess(message: String?, customButtonText: String? = nil, for duration: TimeInterval = 2.0) {
         showBanner(with: .success, message: message, customButtonTitle: customButtonText)
+        timerAmount = duration
         timer = Timer.scheduledTimer(timeInterval: duration, target: self, selector: #selector(dismissBanner), userInfo: nil, repeats: false)
     }
     
     open func showError(_ message: String?, customButtonText: String? = nil, for duration: TimeInterval? = nil) {
         showBanner(with: .error, message: message, customButtonTitle: customButtonText)
+        timerAmount = duration
         if let duration = duration {
             timer = Timer.scheduledTimer(timeInterval: duration, target: self, selector: #selector(dismissBanner), userInfo: nil, repeats: false)
         }
@@ -181,6 +185,46 @@ extension LoadingBanner {
     func toggleViews(highlighted: Bool) {
         let alpha: CGFloat = highlighted ? 0.2 : 1.0
         stackView.alpha = alpha
+    }
+    
+    func handlePan(_ recognizer: UIPanGestureRecognizer) {
+        let maxDistance: CGFloat = 100.0
+        switch recognizer.state {
+        case .began:
+            timer?.invalidate()
+            transform = .identity
+        case .cancelled, .failed:
+            transform = .identity
+        case .changed:
+            let translation = recognizer.translation(in: superview!)
+            var adjustedY = min(translation.y, maxDistance)
+            if translation.y > maxDistance {
+                let extra = translation.y - maxDistance
+                let multiplierExtra = maxDistance - ((maxDistance / (maxDistance + extra)) * extra)
+                let multiplier = multiplierExtra / maxDistance
+                adjustedY += multiplier * extra
+            }
+            transform = CGAffineTransform(translationX: 0.0, y: adjustedY)
+        case .ended:
+            buttonTouchEnded()
+            showing = false
+            let translation = recognizer.translation(in: superview!)
+            if translation.y < 0 {
+                toggleBanner {
+                    self.transform = .identity
+                }
+            } else {
+                let adjustedY = min(translation.y, maxDistance)
+                UIView.animate(withDuration: 0.3, delay: 0.0, usingSpringWithDamping: 0.7, initialSpringVelocity: (adjustedY / maxDistance) * (maxDistance * 0.4), options: [], animations: {
+                    self.transform = .identity
+                }, completion: nil)
+            }
+            if let timerAmount = timerAmount {
+                timer = Timer.scheduledTimer(timeInterval: timerAmount, target: self, selector: #selector(dismissBanner), userInfo: nil, repeats: false)
+            }
+        case .possible:
+            break
+        }
     }
 
 }
@@ -229,6 +273,7 @@ private extension LoadingBanner {
     
     func showBanner(with status: Status, message: String?, customButtonTitle: String?) {
         timer?.invalidate()
+        timer = nil
         toggleSpinner(toShowing: status == .loading)
         messageLabel.text = message
         self.status = status
@@ -297,6 +342,9 @@ private extension LoadingBanner {
         button.addTarget(self, action: #selector(LoadingBanner.bannerTapped), for: .touchUpInside)
         button.addTarget(self, action: #selector(buttonTouchBegan), for: .touchDown)
         button.addTarget(self, action: #selector(buttonTouchEnded), for: .touchDragExit)
+        
+        let panRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handlePan(_:)))
+        addGestureRecognizer(panRecognizer)
         
         updateColors()
     }
