@@ -95,6 +95,7 @@ public protocol LoadingBannerDelegate: class {
     fileprivate let fakeButton = UILabel()
     fileprivate var showing = false
     fileprivate let defaultFakeButtonTitle = "✕"
+    fileprivate var timer: Timer?
     
     
     // MARK: - Initializers
@@ -122,37 +123,26 @@ public protocol LoadingBannerDelegate: class {
     // MARK: - Public functions
     
     open func showLoading(customButtonText: String? = nil) {
-        status = .loading
-        messageLabel.text = defaultText
-        self.customButtonText = customButtonText
-        toggleSpinner(toShowing: true)
-        showBanner()
+        showBanner(with: .loading, message: defaultText, customButtonTitle: customButtonText)
     }
     
-    open func showMessage(_ text: String?, customButtonText: String? = nil) {
-        status = .loading
-        messageLabel.text = text
-        toggleSpinner(toShowing: true)
-        showBanner()
-    }
-    
-    open func showSuccess(message: String?, customButtonText: String? = nil, for duration: Double = 2.0) {
-        status = .success
-        messageLabel.text = message
-        self.customButtonText = customButtonText
-        toggleSpinner(toShowing: false)
-        showBanner()
-        delay(duration) { 
-            self.dismissBanner()
+    open func showMessage(_ text: String?, customButtonText: String? = nil, for duration: TimeInterval? = nil) {
+        showBanner(with: .loading, message: text, customButtonTitle: customButtonText)
+        if let duration = duration {
+            timer = Timer.scheduledTimer(timeInterval: duration, target: self, selector: #selector(dismissBanner), userInfo: nil, repeats: false)
         }
     }
     
-    open func showError(_ message: String?, customButtonText: String? = nil) {
-        status = .error
-        messageLabel.text = message
-        self.customButtonText = customButtonText
-        toggleSpinner(toShowing: false)
-        showBanner()
+    open func showSuccess(message: String?, customButtonText: String? = nil, for duration: TimeInterval = 2.0) {
+        showBanner(with: .success, message: message, customButtonTitle: customButtonText)
+        timer = Timer.scheduledTimer(timeInterval: duration, target: self, selector: #selector(dismissBanner), userInfo: nil, repeats: false)
+    }
+    
+    open func showError(_ message: String?, customButtonText: String? = nil, for duration: TimeInterval? = nil) {
+        showBanner(with: .error, message: message, customButtonTitle: customButtonText)
+        if let duration = duration {
+            timer = Timer.scheduledTimer(timeInterval: duration, target: self, selector: #selector(dismissBanner), userInfo: nil, repeats: false)
+        }
     }
 
     open func dismiss() {
@@ -223,7 +213,12 @@ private extension LoadingBanner {
         }
     }
     
-    func showBanner() {
+    func showBanner(with status: Status, message: String?, customButtonTitle: String?) {
+        timer?.invalidate()
+        toggleSpinner(toShowing: status == .loading)
+        messageLabel.text = message
+        self.status = status
+        customButtonText = customButtonTitle
         showing = true
         toggleBanner()
     }
@@ -268,7 +263,8 @@ private extension LoadingBanner {
         fakeButton.font = UIFont.preferredFont(forTextStyle: .caption1)
         fakeButton.textAlignment = .center
         fakeButton.translatesAutoresizingMaskIntoConstraints = false
-        fakeButton.widthAnchor.constraint(equalTo: fakeButton.heightAnchor).isActive = true
+        fakeButton.widthAnchor.constraint(greaterThanOrEqualTo: fakeButton.heightAnchor, multiplier: 1.0).isActive = true
+        fakeButton.setContentHuggingPriority(800, for: .horizontal)
         stackView.addArrangedSubview(fakeButton)
         
         let button = UIButton()
