@@ -7,6 +7,10 @@
 
 import UIKit
 
+public protocol LoadingBannerDelegate: class {
+    func bannerTapped(_ banner: LoadingBanner)
+}
+
 @IBDesignable open class LoadingBanner: UIView {
 
     // MARK: - Public properties
@@ -38,7 +42,7 @@ import UIKit
     
     @IBInspectable open var defaultText: String = "Loading…" {
         didSet {
-            loadingLabel.text = defaultText
+            messageLabel.text = defaultText
         }
     }
     
@@ -50,6 +54,18 @@ import UIKit
             vibrancyView.effect = vibrancyEffect
         }
     }
+    
+    open var customButtonText: String? {
+        didSet {
+            if let text = customButtonText {
+                fakeButton.text = text
+            } else {
+                fakeButton.text = defaultFakeButtonTitle
+            }
+        }
+    }
+
+    open weak var delegate: LoadingBannerDelegate?
     
     
     // MARK: - Internal properties
@@ -74,12 +90,11 @@ import UIKit
     fileprivate var status = Status.loading
     fileprivate let spinner = UIActivityIndicatorView(activityIndicatorStyle: .white)
     fileprivate var heightConstraint: NSLayoutConstraint!
-    fileprivate let loadingStackView = UIStackView()
-    fileprivate let loadingLabel = UILabel()
-    fileprivate let errorStackView = UIStackView()
-    fileprivate let errorLabel = UILabel()
-    fileprivate var errorMessage: String?
+    fileprivate let stackView = UIStackView()
+    fileprivate let messageLabel = UILabel()
+    fileprivate let fakeButton = UILabel()
     fileprivate var showing = false
+    fileprivate let defaultFakeButtonTitle = "✕"
     
     
     // MARK: - Initializers
@@ -106,26 +121,25 @@ import UIKit
     
     // MARK: - Public functions
     
-    open func showLoading() {
-        toggleError(nil)
+    open func showLoading(customButtonText: String? = nil) {
         status = .loading
-        loadingLabel.text = defaultText
+        messageLabel.text = defaultText
+        self.customButtonText = customButtonText
         toggleSpinner(toShowing: true)
         showBanner()
     }
     
-    open func showMessage(_ text: String?) {
-        toggleError(nil)
+    open func showMessage(_ text: String?, customButtonText: String? = nil) {
         status = .loading
-        loadingLabel.text = text
+        messageLabel.text = text
         toggleSpinner(toShowing: true)
         showBanner()
     }
     
-    open func showSuccess(message: String?, for duration: Double = 2.0) {
-        toggleError(nil)
+    open func showSuccess(message: String?, customButtonText: String? = nil, for duration: Double = 2.0) {
         status = .success
-        loadingLabel.text = message
+        messageLabel.text = message
+        self.customButtonText = customButtonText
         toggleSpinner(toShowing: false)
         showBanner()
         delay(duration) { 
@@ -133,9 +147,11 @@ import UIKit
         }
     }
     
-    open func showError(_ message: String?) {
-        toggleError(message ?? "")
+    open func showError(_ message: String?, customButtonText: String? = nil) {
         status = .error
+        messageLabel.text = message
+        self.customButtonText = customButtonText
+        toggleSpinner(toShowing: false)
         showBanner()
     }
 
@@ -150,13 +166,17 @@ import UIKit
 
 extension LoadingBanner {
     
+    func bannerTapped() {
+        if let delegate = delegate {
+            delegate.bannerTapped(self)
+        } else {
+            dismissBanner()
+        }
+    }
+    
     func dismissBanner() {
         showing = false
-        toggleBanner({
-            self.errorMessage = nil
-            self.loadingStackView.isHidden = false
-            self.errorStackView.isHidden = true
-        })
+        toggleBanner()
     }
 
 }
@@ -195,19 +215,6 @@ private extension LoadingBanner {
         }
     }
     
-    func toggleError(_ message: String?) {
-        if let message = message {
-            errorMessage = message
-            errorLabel.text = message
-            errorStackView.isHidden = false
-            loadingStackView.isHidden = true
-        } else {
-            errorMessage = nil
-            loadingStackView.isHidden = false
-            errorStackView.isHidden = true
-        }
-    }
-    
     func toggleSpinner(toShowing: Bool) {
         if toShowing {
             spinner.startAnimating()
@@ -243,44 +250,31 @@ private extension LoadingBanner {
         visualEffectView.contentView.addSubview(vibrancyView)
         setupFullSize(vibrancyView)
         
-        vibrancyView.contentView.addSubview(loadingStackView)
-        setupFullHeight(loadingStackView)
-        loadingStackView.centerXAnchor.constraint(equalTo: vibrancyView.centerXAnchor).isActive = true
-        loadingStackView.spacing = 4.0
+        vibrancyView.contentView.addSubview(stackView)
+        setupFullHeight(stackView)
+        stackView.centerXAnchor.constraint(equalTo: vibrancyView.centerXAnchor).isActive = true
+        stackView.spacing = 4.0
         
-        loadingStackView.addArrangedSubview(spinner)
+        stackView.addArrangedSubview(spinner)
         
-        loadingLabel.text = defaultText
+        messageLabel.text = defaultText
         if #available(iOSApplicationExtension 10.0, *) {
-            loadingLabel.adjustsFontForContentSizeCategory = true
+            messageLabel.adjustsFontForContentSizeCategory = true
         }
-        loadingLabel.font = UIFont.preferredFont(forTextStyle: .caption1)
-        loadingStackView.addArrangedSubview(loadingLabel)
+        messageLabel.font = UIFont.preferredFont(forTextStyle: .caption1)
+        stackView.addArrangedSubview(messageLabel)
         
-        vibrancyView.contentView.addSubview(errorStackView)
-        setupFullSize(errorStackView)
-        
-        errorStackView.addArrangedSubview(errorLabel)
-        if #available(iOSApplicationExtension 10.0, *) {
-            errorLabel.adjustsFontForContentSizeCategory = true
-        }
-        errorLabel.font = UIFont.preferredFont(forTextStyle: .caption1)
-        errorLabel.textAlignment = .center
-        
-        let closeLabel = UILabel()
-        closeLabel.text = "✕"
-        closeLabel.font = UIFont.preferredFont(forTextStyle: .caption1)
-        closeLabel.textAlignment = .center
-        closeLabel.translatesAutoresizingMaskIntoConstraints = false
-        closeLabel.widthAnchor.constraint(equalTo: closeLabel.heightAnchor).isActive = true
-        errorStackView.addArrangedSubview(closeLabel)
-        
-        errorStackView.isHidden = true
+        fakeButton.text = defaultFakeButtonTitle
+        fakeButton.font = UIFont.preferredFont(forTextStyle: .caption1)
+        fakeButton.textAlignment = .center
+        fakeButton.translatesAutoresizingMaskIntoConstraints = false
+        fakeButton.widthAnchor.constraint(equalTo: fakeButton.heightAnchor).isActive = true
+        stackView.addArrangedSubview(fakeButton)
         
         let button = UIButton()
         addSubview(button)
         setupFullSize(button)
-        button.addTarget(self, action: #selector(LoadingBanner.dismissBanner), for: .touchUpInside)
+        button.addTarget(self, action: #selector(LoadingBanner.bannerTapped), for: .touchUpInside)
         
         updateColors()
     }
