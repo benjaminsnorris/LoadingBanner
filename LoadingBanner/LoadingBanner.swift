@@ -193,6 +193,7 @@ extension LoadingBanner {
         case .began:
             timer?.invalidate()
             transform = .identity
+            buttonTouchEnded()
         case .cancelled, .failed:
             transform = .identity
         case .changed:
@@ -209,18 +210,17 @@ extension LoadingBanner {
             buttonTouchEnded()
             showing = false
             let translation = recognizer.translation(in: superview!)
-            if translation.y < 0 {
-                toggleBanner {
-                    self.transform = .identity
+            let velocity = recognizer.velocity(in: superview!)
+            let adjustedY = min(translation.y, maxDistance)
+            UIView.animate(withDuration: 0.3, delay: 0.0, usingSpringWithDamping: 0.7, initialSpringVelocity: (adjustedY / maxDistance) * (maxDistance * 0.4), options: [], animations: {
+                self.transform = .identity
+            }) { _ in
+                if let timerAmount = self.timerAmount {
+                    self.timer = Timer.scheduledTimer(timeInterval: timerAmount, target: self, selector: #selector(self.dismissBanner), userInfo: nil, repeats: false)
                 }
-            } else {
-                let adjustedY = min(translation.y, maxDistance)
-                UIView.animate(withDuration: 0.3, delay: 0.0, usingSpringWithDamping: 0.7, initialSpringVelocity: (adjustedY / maxDistance) * (maxDistance * 0.4), options: [], animations: {
-                    self.transform = .identity
-                }, completion: nil)
             }
-            if let timerAmount = timerAmount {
-                timer = Timer.scheduledTimer(timeInterval: timerAmount, target: self, selector: #selector(dismissBanner), userInfo: nil, repeats: false)
+            if translation.y < 0 || velocity.y < -200 {
+                self.toggleBanner()
             }
         case .possible:
             break
