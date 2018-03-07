@@ -332,6 +332,7 @@ private extension LoadingBanner {
         fakeButton.textAlignment = .center
         fakeButton.translatesAutoresizingMaskIntoConstraints = false
         fakeButton.setContentHuggingPriority(800, for: .horizontal)
+        fakeButton.setContentCompressionResistancePriority(999, for: .horizontal)
         stackView.addArrangedSubview(fakeButton)
         
         let trailingSpacer = UIView()
