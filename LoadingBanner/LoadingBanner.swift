@@ -9,6 +9,7 @@ import UIKit
 
 public protocol LoadingBannerDelegate: class {
     func bannerTapped(_ banner: LoadingBanner)
+    func bannerDismissed(_ banner: LoadingBanner)
 }
 
 @IBDesignable open class LoadingBanner: UIView {
@@ -172,6 +173,7 @@ extension LoadingBanner {
     func dismissBanner() {
         showing = false
         toggleBanner()
+        delegate?.bannerDismissed(self)
     }
     
     func buttonTouchBegan() {
