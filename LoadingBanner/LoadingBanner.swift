@@ -161,7 +161,7 @@ public protocol LoadingBannerDelegate: class {
 
 extension LoadingBanner {
     
-    func bannerTapped() {
+    @objc func bannerTapped() {
         buttonTouchEnded()
         if let delegate = delegate {
             delegate.bannerTapped(self)
@@ -170,17 +170,17 @@ extension LoadingBanner {
         }
     }
     
-    func dismissBanner() {
+    @objc func dismissBanner() {
         showing = false
         toggleBanner()
         delegate?.bannerDismissed(self)
     }
     
-    func buttonTouchBegan() {
+    @objc func buttonTouchBegan() {
         toggleViews(highlighted: true)
     }
     
-    func buttonTouchEnded() {
+    @objc func buttonTouchEnded() {
         toggleViews(highlighted: false)
     }
     
@@ -189,7 +189,7 @@ extension LoadingBanner {
         stackView.alpha = alpha
     }
     
-    func handlePan(_ recognizer: UIPanGestureRecognizer) {
+    @objc func handlePan(_ recognizer: UIPanGestureRecognizer) {
         let maxDistance: CGFloat = 100.0
         switch recognizer.state {
         case .began:
@@ -331,8 +331,8 @@ private extension LoadingBanner {
         fakeButton.font = UIFont.preferredFont(forTextStyle: .caption1)
         fakeButton.textAlignment = .center
         fakeButton.translatesAutoresizingMaskIntoConstraints = false
-        fakeButton.setContentHuggingPriority(800, for: .horizontal)
-        fakeButton.setContentCompressionResistancePriority(999, for: .horizontal)
+        fakeButton.setContentHuggingPriority(UILayoutPriority(rawValue: 800), for: .horizontal)
+        fakeButton.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 999), for: .horizontal)
         stackView.addArrangedSubview(fakeButton)
         
         let trailingSpacer = UIView()
