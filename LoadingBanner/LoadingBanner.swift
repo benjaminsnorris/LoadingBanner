@@ -36,14 +36,19 @@ public protocol LoadingBannerDelegate: class {
     
     @IBInspectable open var height: CGFloat = 24.0 {
         didSet {
-            heightConstraint.constant = height
-            layoutIfNeeded()
+            updateHeight(animated: false)
         }
     }
     
     @IBInspectable open var defaultText: String = "Loading…" {
         didSet {
             messageLabel.text = defaultText
+        }
+    }
+    
+    @IBInspectable open var startVisible: Bool = true {
+        didSet {
+            updateHeight(animated: false)
         }
     }
     
@@ -241,17 +246,26 @@ private extension LoadingBanner {
         UIView.animate(withDuration: 0.0, animations: {
             // This is a hack to get the banner to start in the right place
             }, completion: { finished in
-                if self.showing {
-                    self.heightConstraint.constant = self.height
-                } else {
-                    self.heightConstraint.constant = 0.0
-                }
-                UIView.animate(withDuration: 0.3, delay: 0.0, usingSpringWithDamping: 1.0, initialSpringVelocity: 1.0, options: [], animations: {
-                    self.layoutIfNeeded()
-                }) { complete in
-                    completion?()
-                }
-        }) 
+                self.updateHeight(animated: true, completion: completion)
+        })
+    }
+    
+    func updateHeight(animated: Bool, completion: (() -> Void)? = nil) {
+        if self.showing {
+            self.heightConstraint.constant = self.height
+        } else {
+            self.heightConstraint.constant = 0.0
+        }
+        if animated {
+            UIView.animate(withDuration: 0.3, delay: 0.0, usingSpringWithDamping: 1.0, initialSpringVelocity: 1.0, options: [], animations: {
+                self.layoutIfNeeded()
+            }) { complete in
+                completion?()
+            }
+        } else {
+            layoutIfNeeded()
+            completion?()
+        }
     }
     
     func updateColors() {
