@@ -14,7 +14,7 @@ struct StaticBanner {
 public extension UIViewController {
     
     /// A shared loading banner that can show at the top of the view controller
-    public var sharedLoadingBanner: LoadingBanner {
+    var sharedLoadingBanner: LoadingBanner {
         let loadingBanner = StaticBanner.banner
         view.addSubview(loadingBanner)
         loadingBanner.translatesAutoresizingMaskIntoConstraints = false
