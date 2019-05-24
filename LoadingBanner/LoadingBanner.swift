@@ -52,7 +52,7 @@ public protocol LoadingBannerDelegate: class {
         }
     }
     
-    open var effectStyle: UIBlurEffectStyle = .extraLight {
+    open var effectStyle: UIBlurEffect.Style = .extraLight {
         didSet {
             let effect = UIBlurEffect(style: effectStyle)
             visualEffectView.effect = effect
@@ -77,7 +77,7 @@ public protocol LoadingBannerDelegate: class {
     // MARK: - Internal properties
     
     var visualEffectView: UIVisualEffectView = {
-        let lightStyle = UIBlurEffectStyle.extraLight
+        let lightStyle = UIBlurEffect.Style.extraLight
         let lightBlurEffect = UIBlurEffect(style: lightStyle)
         return UIVisualEffectView(effect: lightBlurEffect)
     }()
@@ -94,7 +94,7 @@ public protocol LoadingBannerDelegate: class {
     // MARK: - Private properties
     
     fileprivate var status = Status.loading
-    fileprivate let spinner = UIActivityIndicatorView(activityIndicatorStyle: .white)
+    fileprivate let spinner = UIActivityIndicatorView(style: .white)
     fileprivate var heightConstraint: NSLayoutConstraint!
     fileprivate let stackView = UIStackView()
     fileprivate let messageLabel = UILabel()
@@ -230,6 +230,8 @@ extension LoadingBanner {
                 self.toggleBanner()
             }
         case .possible:
+            break
+        @unknown default:
             break
         }
     }
